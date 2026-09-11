@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Delete Button — Tilted & Static</title>
+    <meta name="description" content="A slick animated Delete button where letters fly into a trash can. Two versions: tilted and static.">
+
+    <style>
+        /* ---------- Reset & Base ---------- */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg-1: #0f0618;
+            --bg-2: #1a1025;
+            --purple-1: #8a2be2;
+            --purple-2: #6a1b9a;
+            --purple-glow: rgba(138, 43, 226, 0.5);
+            --purple-glow-strong: rgba(138, 43, 226, 0.9);
+            --text: #ffffff;
+            --text-dim: #9e8ba8;
+            --card-bg: rgba(255, 255, 255, 0.04);
+            --card-border: rgba(138, 43, 226, 0.25);
+        }
+
+        html, body {
+            min-height: 100vh;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background:
+                radial-gradient(circle at 20% 10%, rgba(138, 43, 226, 0.18), transparent 45%),
+                radial-gradient(circle at 80% 90%, rgba(106, 27, 154, 0.22), transparent 45%),
+                linear-gradient(160deg, var(--bg-1), var(--bg-2));
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 48px 20px 64px;
+            overflow-x: hidden;
+        }
+
+        /* Subtle floating orbs for ambience */
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        body::before {
+            width: 380px;
+            height: 380px;
+            background: rgba(138, 43, 226, 0.25);
+            top: -120px;
+            left: -120px;
+        }
+        body::after {
+            width: 320px;
+            height: 320px;
+            background: rgba(106, 27, 154, 0.25);
+            bottom: -100px;
+            right: -100px;
+        }
+
+        /* ---------- Header ---------- */
+        .page-header {
+            text-align: center;
+            max-width: 720px;
+            margin-bottom: 48px;
+            position: relative;
+            z-index: 1;
+            animation: fadeUp 0.7s ease both;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border: 1px solid var(--card-border);
+            background: var(--card-bg);
+            border-radius: 999px;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 18px;
+            backdrop-filter: blur(8px);
+        }
+
+        .page-header h1 {
+            font-size: clamp(28px, 5vw, 48px);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1.15;
+            background: linear-gradient(135deg, #ffffff 0%, #d9b3ff 60%, #8a2be2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 14px;
+        }
+
+        .page-header p {
+            color: var(--text-dim);
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* ---------- Cards ---------- */
+        .demos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 28px;
+            width: 100%;
+            max-width: 900px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .demo-card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            padding: 32px 28px 28px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 22px;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            text-decoration: none;
+            color: inherit;
+            overflow: hidden;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        border-color 0.35s ease,
+                        box-shadow 0.35s ease;
+            animation: fadeUp 0.7s ease both;
+        }
+
+        .demo-card:nth-child(1) { animation-delay: 0.1s; }
+        .demo-card:nth-child(2) { animation-delay: 0.2s; }
+
+        .demo-card::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.6), transparent 50%, rgba(138, 43, 226, 0.3));
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
+        }
+
+        .demo-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(138, 43, 226, 0.6);
+            box-shadow: 0 18px 40px -12px var(--purple-glow-strong);
+        }
+
+        .demo-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Visual preview of the trash icon */
+        .preview {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 120px;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .trash-preview {
+            position: relative;
+            width: 44px;
+            height: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-origin: bottom center;
+        }
+
+        /* Tilted version tilts on card hover */
+        .demo-card.tilted:hover .trash-preview {
+            transform: rotateZ(45deg) translateX(8px);
+        }
+
+        .preview .lid {
+            width: 44px;
+            height: 7px;
+            background: #ffffff;
+            border-radius: 3px;
+            position: relative;
+            z-index: 2;
+            transition: transform 0.25s ease;
+            transform-origin: center bottom;
+        }
+        .preview .lid::before {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 14px;
+            height: 5px;
+            background: #ffffff;
+            border-radius: 3px 3px 0 0;
+        }
+
+        .preview .body {
+            width: 34px;
+            height: 38px;
+            border: 3px solid #ffffff;
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            position: relative;
+            background: linear-gradient(135deg, var(--purple-1), var(--purple-2));
+        }
+        .preview .body::before,
+        .preview .body::after {
+            content: "";
+            position: absolute;
+            top: 6px;
+            width: 2px;
+            height: 22px;
+            background: #ffffff;
+        }
+        .preview .body::before { left: 8px; }
+        .preview .body::after { right: 8px; }
+
+        /* Glow behind the icon */
+        .preview::after {
+            content: "";
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(138, 43, 226, 0.45), transparent 70%);
+            z-index: -1;
+            transition: transform 0.35s ease;
+        }
+        .demo-card:hover .preview::after {
+            transform: scale(1.3);
+        }
+
+        .demo-card h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .demo-card h2 .tag {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 3px 9px;
+            border-radius: 999px;
+            background: rgba(138, 43, 226, 0.18);
+            color: #d9b3ff;
+            border: 1px solid rgba(138, 43, 226, 0.4);
+        }
+
+        .demo-card p {
+            color: var(--text-dim);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 22px;
+            flex: 1;
+        }
+
+        .demo-card .cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #d9b3ff;
+            transition: gap 0.3s ease, color 0.3s ease;
+        }
+
+        .demo-card:hover .cta {
+            gap: 14px;
+            color: #ffffff;
+        }
+
+        .demo-card .cta .arrow {
+            transition: transform 0.3s ease;
+        }
+        .demo-card:hover .cta .arrow {
+            transform: translateX(2px);
+        }
+
+        /* ---------- Footer ---------- */
+        .page-footer {
+            margin-top: 56px;
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 13px;
+            position: relative;
+            z-index: 1;
+            animation: fadeUp 0.7s ease 0.3s both;
+        }
+
+        .page-footer a {
+            color: #d9b3ff;
+            text-decoration: none;
+            border-bottom: 1px dashed rgba(217, 179, 255, 0.4);
+            transition: color 0.25s ease, border-color 0.25s ease;
+        }
+        .page-footer a:hover {
+            color: #ffffff;
+            border-color: #ffffff;
+        }
+
+        /* ---------- Animations ---------- */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ---------- Responsive ---------- */
+        @media (max-width: 480px) {
+            body { padding: 32px 16px 48px; }
+            .demo-card { padding: 26px 22px 22px; }
+            .preview { height: 100px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="page-header">
+        <span class="badge">HTML · CSS · JavaScript</span>
+        <h1>Animated Delete Button</h1>
+        <p>
+            A slick delete interaction where the letters of &ldquo;Delete&rdquo; fly one by one
+            into a trash can. Two variations included — pick your favorite.
+        </p>
+    </header>
+
+    <main class="demos">
+        <!-- Tilted Version -->
+        <a class="demo-card tilted" href="./tilted/index.html">
+            <div class="preview">
+                <div class="trash-preview">
+                    <div class="lid"></div>
+                    <div class="body"></div>
+                </div>
+            </div>
+            <h2>
+                Tilted Trash
+                <span class="tag">45°</span>
+            </h2>
+            <p>
+                The trash can tilts 45° rightward to catch the letters as they fly in,
+                then straightens back up. Hover the card to preview the tilt.
+            </p>
+            <span class="cta">
+                View Demo
+                <span class="arrow">→</span>
+            </span>
+        </a>
+
+        <!-- Static Version -->
+        <a class="demo-card static" href="./static/index.html">
+            <div class="preview">
+                <div class="trash-preview">
+                    <div class="lid"></div>
+                    <div class="body"></div>
+                </div>
+            </div>
+            <h2>
+                Static Trash
+                <span class="tag">Classic</span>
+            </h2>
+            <p>
+                The original version — the trash can stays upright while letters
+                drop into it one by one. Clean, minimal, and satisfying.
+            </p>
+            <span class="cta">
+                View Demo
+                <span class="arrow">→</span>
+            </span>
+        </a>
+    </main>
+
+    <footer class="page-footer">
+        Built by <a href="https://github.com/monejoel" target="_blank" rel="noopener">Joel Mone</a>
+        · Free to use under the MIT License
+    </footer>
+
+</body>
+</html>
