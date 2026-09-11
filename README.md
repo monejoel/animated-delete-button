@@ -55,9 +55,9 @@ MIT — free to use in your own projects.
 
 **Joel Mone**
 
-- YouTube: [@joelmone](https://www.youtube.com/@joelmone)
-- GitHub: [@monejoel](https://github.com/monejoel)
-- Facebook: [@monejoel](https://www.facebook.com/monejoel)
-- Instagram: [@monejoel](https://www.instagram.com/monejoel)
-- X: [@monejoel_](https://www.x.com/monejoel_)
-- Tiktok: [@monejoel](https://www.tiktok.com/monejoel)
+[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@joelmone)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/monejoel)
+[![Facebook](https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white)](https://www.facebook.com/monejoel)
+[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/monejoel)
+[![X](https://img.shields.io/badge/X-000000?style=for-the-badge&logo=x&logoColor=white)](https://www.x.com/monejoel_)
+[![TikTok](https://img.shields.io/badge/TikTok-000000?style=for-the-badge&logo=tiktok&logoColor=white)](https://www.tiktok.com/monejoel)
