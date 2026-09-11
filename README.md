@@ -57,3 +57,7 @@ MIT — free to use in your own projects.
 
 - YouTube: [@joelmone](https://www.youtube.com/@joelmone)
 - GitHub: [@monejoel](https://github.com/monejoel)
+- Facebook: [@monejoel](https://www.facebook.com/monejoel)
+- Instagram: [@monejoel](https://www.instagram.com/monejoel)
+- X: [@monejoel_](https://www.x.com/monejoel_)
+- Tiktok: [@monejoel](https://www.tiktok.com/monejoel)
