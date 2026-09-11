@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Delete Button By Joel Mone</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <button class="delete-btn" id="deleteBtn">
+            <!-- Trash Icon SVG Structure -->
+            <div class="trash-wrapper" id="trashWrapper">
+                <div class="trash-lid"></div>
+                <div class="trash-can"></div>
+            </div>
+
+            <!-- Text with distance variable per letter -->
+            <div class="text-wrapper" id="textWrapper">
+                <!-- Note: We use --fly-x and --fly-y to simulate the video's --fly-dist logic -->
+                <!-- The first letters fly further to the left to reach the trash can -->
+                <span class="letter" style="--fly-x: -110px; --fly-y: -15px;">D</span>
+                <span class="letter" style="--fly-x: -90px; --fly-y: -5px;">e</span>
+                <span class="letter" style="--fly-x: -70px; --fly-y: 0px;">l</span>
+                <span class="letter" style="--fly-x: -60px; --fly-y: 5px;">e</span>
+                <span class="letter" style="--fly-x: -50px; --fly-y: 10px;">t</span>
+                <span class="letter" style="--fly-x: -40px; --fly-y: 15px;">e</span>
+            </div>
+        </button>
+        
+        <div class="subtitle">Animated Delete Button By Joel Mone</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
