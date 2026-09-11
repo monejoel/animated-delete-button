@@ -41,7 +41,7 @@ git clone https://github.com/monejoel/animated-delete-button.git
 
 ## 📺 Tutorial
 
-Watch the full breakdown on my YouTube channel: [@joelmone](https://www.youtube.com/@joelmone)
+Watch the full breakdown on my YouTube channel: [@joelmone](https://www.youtube.com/joelmone)
 
 ---
 
@@ -55,5 +55,5 @@ MIT — free to use in your own projects.
 
 **Joel Mone**
 
-- YouTube: [@joelmone](https://www.youtube.com/@joelmone)
+- YouTube: [@joelmone](https://www.youtube.com/joelmone)
 - GitHub: [@monejoel](https://github.com/monejoel)
