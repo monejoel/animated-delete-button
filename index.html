@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Animated Delete Button — Tilted & Static</title>
-    <meta name="description" content="A slick animated Delete button where letters fly into a trash can. Two versions: tilted and static.">
+    <title>Animated Delete Button — Tilted, Static & Regular</title>
+    <meta name="description" content="A slick animated Delete button where letters fly into a trash can. Three versions: tilted, static, and a regular delete button.">
 
     <style>
         /* ---------- Reset & Base ---------- */
@@ -23,6 +23,10 @@
             --purple-2: #6a1b9a;
             --purple-glow: rgba(138, 43, 226, 0.5);
             --purple-glow-strong: rgba(138, 43, 226, 0.9);
+            --red-1: #ef4444;
+            --red-2: #dc2626;
+            --red-glow: rgba(239, 68, 68, 0.5);
+            --red-glow-strong: rgba(239, 68, 68, 0.9);
             --text: #ffffff;
             --text-dim: #9e8ba8;
             --card-bg: rgba(255, 255, 255, 0.04);
@@ -47,7 +51,6 @@
             overflow-x: hidden;
         }
 
-        /* Subtle floating orbs for ambience */
         body::before,
         body::after {
             content: "";
@@ -117,10 +120,10 @@
         /* ---------- Cards ---------- */
         .demos {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 28px;
             width: 100%;
-            max-width: 900px;
+            max-width: 1100px;
             position: relative;
             z-index: 1;
         }
@@ -144,36 +147,29 @@
             animation: fadeUp 0.7s ease both;
         }
 
-        .demo-card:nth-child(1) { animation-delay: 0.1s; }
-        .demo-card:nth-child(2) { animation-delay: 0.2s; }
+        .demo-card:nth-child(1) { animation-delay: 0.05s; }
+        .demo-card:nth-child(2) { animation-delay: 0.15s; }
+        .demo-card:nth-child(3) { animation-delay: 0.25s; }
 
-        .demo-card::before {
-            content: "";
-            position: absolute;
-            inset: -1px;
-            border-radius: inherit;
-            padding: 1px;
-            background: linear-gradient(135deg, rgba(138, 43, 226, 0.6), transparent 50%, rgba(138, 43, 226, 0.3));
-            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            opacity: 0;
-            transition: opacity 0.35s ease;
-            pointer-events: none;
-        }
-
-        .demo-card:hover {
+        /* Purple glow for animated cards */
+        .demo-card.tilted:hover,
+        .demo-card.static:hover {
             transform: translateY(-6px);
             border-color: rgba(138, 43, 226, 0.6);
             box-shadow: 0 18px 40px -12px var(--purple-glow-strong);
         }
 
-        .demo-card:hover::before {
-            opacity: 1;
+        /* Red glow for regular card */
+        .demo-card.regular {
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+        .demo-card.regular:hover {
+            transform: translateY(-6px);
+            border-color: rgba(239, 68, 68, 0.6);
+            box-shadow: 0 18px 40px -12px var(--red-glow-strong);
         }
 
-        /* Visual preview of the trash icon */
+        /* ---------- Preview ---------- */
         .preview {
             display: flex;
             justify-content: center;
@@ -195,7 +191,6 @@
             transform-origin: bottom center;
         }
 
-        /* Tilted version tilts on card hover */
         .demo-card.tilted:hover .trash-preview {
             transform: rotateZ(45deg) translateX(8px);
         }
@@ -207,8 +202,8 @@
             border-radius: 3px;
             position: relative;
             z-index: 2;
-            transition: transform 0.25s ease;
             transform-origin: center bottom;
+            transition: transform 0.25s ease;
         }
         .preview .lid::before {
             content: "";
@@ -243,7 +238,34 @@
         .preview .body::before { left: 8px; }
         .preview .body::after { right: 8px; }
 
-        /* Glow behind the icon */
+        /* Regular button preview */
+        .regular-preview {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 26px;
+            background: linear-gradient(135deg, var(--red-1), var(--red-2));
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+            box-shadow: 0 8px 20px -8px var(--red-glow);
+            transition: transform 0.3s ease;
+        }
+        .demo-card.regular:hover .regular-preview {
+            transform: translateY(-2px) scale(1.03);
+        }
+        .regular-preview svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            stroke-width: 2.2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* Glow */
         .preview::after {
             content: "";
             position: absolute;
@@ -254,10 +276,19 @@
             z-index: -1;
             transition: transform 0.35s ease;
         }
-        .demo-card:hover .preview::after {
+        .demo-card.tilted:hover .preview::after,
+        .demo-card.static:hover .preview::after {
             transform: scale(1.3);
         }
 
+        .demo-card.regular .preview::after {
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.4), transparent 70%);
+        }
+        .demo-card.regular:hover .preview::after {
+            transform: scale(1.3);
+        }
+
+        /* ---------- Card Text ---------- */
         .demo-card h2 {
             font-size: 20px;
             font-weight: 700;
@@ -279,6 +310,12 @@
             border: 1px solid rgba(138, 43, 226, 0.4);
         }
 
+        .demo-card.regular h2 .tag {
+            background: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
         .demo-card p {
             color: var(--text-dim);
             font-size: 14px;
@@ -295,6 +332,10 @@
             font-weight: 600;
             color: #d9b3ff;
             transition: gap 0.3s ease, color 0.3s ease;
+        }
+
+        .demo-card.regular .cta {
+            color: #fca5a5;
         }
 
         .demo-card:hover .cta {
@@ -333,14 +374,8 @@
 
         /* ---------- Animations ---------- */
         @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         /* ---------- Responsive ---------- */
@@ -358,7 +393,7 @@
         <h1>Animated Delete Button</h1>
         <p>
             A slick delete interaction where the letters of &ldquo;Delete&rdquo; fly one by one
-            into a trash can. Two variations included — pick your favorite.
+            into a trash can — plus a regular delete button for reference.
         </p>
     </header>
 
@@ -377,7 +412,7 @@
             </h2>
             <p>
                 The trash can tilts 45° rightward to catch the letters as they fly in,
-                then straightens back up. Hover the card to preview the tilt.
+                then straightens back up. Hover to preview the tilt.
             </p>
             <span class="cta">
                 View Demo
@@ -400,6 +435,34 @@
             <p>
                 The original version — the trash can stays upright while letters
                 drop into it one by one. Clean, minimal, and satisfying.
+            </p>
+            <span class="cta">
+                View Demo
+                <span class="arrow">→</span>
+            </span>
+        </a>
+
+        <!-- Regular Version -->
+        <a class="demo-card regular" href="./regular.html">
+            <div class="preview">
+                <div class="regular-preview">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+                        <path d="M10 11v6"></path>
+                        <path d="M14 11v6"></path>
+                        <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path>
+                    </svg>
+                    Delete
+                </div>
+            </div>
+            <h2>
+                Regular Button
+                <span class="tag">Standard</span>
+            </h2>
+            <p>
+                A plain, no-frills delete button. No animation, no fuss — just a clean,
+                standard interaction for comparison.
             </p>
             <span class="cta">
                 View Demo
