@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regular Delete Button</title>
+
+    <style>
+        /* ---------- Reset & Base ---------- */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg-1: #0f0618;
+            --bg-2: #1a1025;
+            --red-1: #ef4444;
+            --red-2: #dc2626;
+            --red-hover: #b91c1c;
+            --red-glow: rgba(239, 68, 68, 0.4);
+            --text: #ffffff;
+            --text-dim: #9e8ba8;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background:
+                radial-gradient(circle at 20% 10%, rgba(239, 68, 68, 0.12), transparent 45%),
+                radial-gradient(circle at 80% 90%, rgba(106, 27, 154, 0.18), transparent 45%),
+                linear-gradient(160deg, var(--bg-1), var(--bg-2));
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            gap: 28px;
+            overflow-x: hidden;
+        }
+
+        /* Subtle floating orbs */
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        body::before {
+            width: 360px;
+            height: 360px;
+            background: rgba(239, 68, 68, 0.18);
+            top: -120px;
+            left: -120px;
+        }
+        body::after {
+            width: 320px;
+            height: 320px;
+            background: rgba(106, 27, 154, 0.22);
+            bottom: -100px;
+            right: -100px;
+        }
+
+        /* ---------- Card Wrapper ---------- */
+        .card {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 22px;
+            padding: 48px 44px;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            text-align: center;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.6);
+            animation: fadeUp 0.7s ease both;
+        }
+
+        .icon-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            margin-bottom: 20px;
+            color: var(--red-1);
+        }
+
+        .icon-badge svg {
+            width: 30px;
+            height: 30px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .card h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.3px;
+        }
+
+        .card p {
+            color: var(--text-dim);
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        /* ---------- The Regular Delete Button ---------- */
+        .delete-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 32px;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--red-1), var(--red-2));
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px -8px var(--red-glow);
+            transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .delete-btn:hover {
+            background: linear-gradient(135deg, var(--red-2), var(--red-hover));
+            box-shadow: 0 10px 24px -8px var(--red-glow);
+            transform: translateY(-1px);
+        }
+
+        .delete-btn:active {
+            transform: translateY(1px) scale(0.98);
+            box-shadow: 0 4px 12px -6px var(--red-glow);
+        }
+
+        .delete-btn:focus-visible {
+            outline: 2px solid var(--red-1);
+            outline-offset: 3px;
+        }
+
+        .delete-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            stroke-width: 2.2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* ---------- Status Feedback ---------- */
+        .status {
+            margin-top: 22px;
+            font-size: 13px;
+            color: var(--text-dim);
+            letter-spacing: 0.5px;
+            min-height: 18px;
+            transition: color 0.3s ease;
+        }
+
+        .status.success {
+            color: #4ade80;
+        }
+
+        .status.error {
+            color: #f87171;
+        }
+
+        /* ---------- Footer ---------- */
+        .footer {
+            position: relative;
+            z-index: 1;
+            font-size: 13px;
+            color: var(--text-dim);
+            text-align: center;
+            animation: fadeUp 0.7s ease 0.15s both;
+        }
+
+        .footer a {
+            color: #fca5a5;
+            text-decoration: none;
+            border-bottom: 1px dashed rgba(252, 165, 165, 0.4);
+            transition: color 0.25s ease, border-color 0.25s ease;
+        }
+
+        .footer a:hover {
+            color: #ffffff;
+            border-color: #ffffff;
+        }
+
+        /* ---------- Animations ---------- */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            .card { padding: 36px 26px; }
+            .card h1 { font-size: 21px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="icon-badge" aria-hidden="true">
+            <!-- Trash icon -->
+            <svg viewBox="0 0 24 24">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+                <path d="M10 11v6"></path>
+                <path d="M14 11v6"></path>
+                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path>
+            </svg>
+        </div>
+
+        <h1>Delete Item</h1>
+        <p>This is a regular delete button. Click it to remove the item. No animation, no fuss — just a clean, standard interaction.</p>
+
+        <button class="delete-btn" id="deleteBtn">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+                <path d="M10 11v6"></path>
+                <path d="M14 11v6"></path>
+                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path>
+            </svg>
+            Delete
+        </button>
+
+        <div class="status" id="status" aria-live="polite"></div>
+    </div>
+
+    <div class="footer">
+        Built by <a href="https://github.com/monejoel" target="_blank" rel="noopener">Joel Mone</a> · MIT License
+    </div>
+
+    <script>
+        const deleteBtn = document.getElementById('deleteBtn');
+        const status = document.getElementById('status');
+
+        deleteBtn.addEventListener('click', () => {
+            // Simple "deleting" simulation
+            deleteBtn.disabled = true;
+            deleteBtn.style.opacity = '0.7';
+            status.textContent = 'Deleting...';
+            status.className = 'status';
+
+            setTimeout(() => {
+                status.textContent = '✓ Item deleted successfully';
+                status.className = 'status success';
+
+                // Re-enable after a short pause (demo purposes)
+                setTimeout(() => {
+                    deleteBtn.disabled = false;
+                    deleteBtn.style.opacity = '1';
+                    status.textContent = '';
+                    status.className = 'status';
+                }, 1800);
+            }, 600);
+        });
+    </script>
+
+</body>
+</html>
