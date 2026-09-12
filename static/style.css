@@ -1,14 +1,20 @@
-/* Base Page Styling */
-body {
+/* ---------- Base ---------- */
+*, *::before, *::after {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    background-color: #1a1025; /* Dark purple background */
+    background: #1a1025;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: white;
+    overflow: hidden;
 }
 
 .container {
@@ -18,7 +24,7 @@ body {
     gap: 20px;
 }
 
-/* Button Styling */
+/* ---------- The Button ---------- */
 .delete-btn {
     position: relative;
     display: flex;
@@ -26,7 +32,7 @@ body {
     justify-content: center;
     gap: 15px;
     padding: 20px 45px;
-    background: linear-gradient(135deg, #8a2be2, #6a1b9a); /* Purple gradient */
+    background: linear-gradient(135deg, #8a2be2, #6a1b9a);
     border: none;
     border-radius: 50px;
     color: white;
@@ -34,11 +40,17 @@ body {
     font-weight: 700;
     cursor: pointer;
     box-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
-    transition: all 0.3s ease;
-    overflow: hidden;
+    transition:
+        padding 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+        border-radius 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.4s ease,
+        transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+        gap 0.4s ease;
+    overflow: visible;
     outline: none;
-    /* Prevent text selection to make clicks feel cleaner */
-    user-select: none; 
+    user-select: none;
+    perspective: 800px;
+    transform: scale(1);
 }
 
 .delete-btn:hover {
@@ -50,7 +62,84 @@ body {
     transform: translateY(1px);
 }
 
-/* Trash Icon Wrapper */
+/* ---------- Circular (post-eat) state ---------- */
+.delete-btn.is-circle {
+    padding: 0;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    gap: 0;
+    box-shadow: 0 0 40px rgba(138, 43, 226, 0.9),
+                0 0 80px rgba(138, 43, 226, 0.4);
+}
+
+/* Zoom pulse while in circle state */
+.delete-btn.is-pulsing {
+    animation: pulseZoom 1.4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@keyframes pulseZoom {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.15); }
+}
+
+/* ---------- Rotating rings ---------- */
+.ring {
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+    /* Conic gradient creates the "bright lines" effect */
+    background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        transparent 250deg,
+        #d9b3ff 300deg,
+        #ffffff 330deg,
+        #d9b3ff 350deg,
+        transparent 360deg
+    );
+    /* Mask out the center so only the ring border shows */
+    -webkit-mask:
+        radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 4px));
+    mask:
+        radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 4px));
+}
+
+.ring-2 {
+    inset: -14px;
+    background: conic-gradient(
+        from 180deg,
+        transparent 0deg,
+        transparent 260deg,
+        #8a2be2 300deg,
+        #ffffff 340deg,
+        transparent 360deg
+    );
+    -webkit-mask:
+        radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+    mask:
+        radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+}
+
+/* Ring visible state */
+.delete-btn.ring-active .ring {
+    opacity: 1;
+}
+.delete-btn.ring-active .ring {
+    animation: spinRing 1.6s linear infinite;
+}
+.delete-btn.ring-active .ring-2 {
+    animation: spinRing 2.2s linear infinite reverse;
+}
+
+@keyframes spinRing {
+    to { transform: rotate(360deg); }
+}
+
+/* ---------- Trash Icon Wrapper ---------- */
 .trash-wrapper {
     position: relative;
     width: 40px;
@@ -59,6 +148,19 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin: bottom center;
+    z-index: 3;
+    flex-shrink: 0;
+}
+
+/* Center the trash icon in circle state */
+.delete-btn.is-circle .trash-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
 }
 
 /* Trash Can Body */
@@ -69,10 +171,11 @@ body {
     border-top: none;
     border-radius: 0 0 6px 6px;
     position: relative;
+    background: linear-gradient(135deg, #8a2be2, #6a1b9a);
 }
 
-/* Trash Can Lines */
-.trash-can::before, .trash-can::after {
+.trash-can::before,
+.trash-can::after {
     content: '';
     position: absolute;
     top: 5px;
@@ -81,9 +184,9 @@ body {
     background: white;
 }
 .trash-can::before { left: 8px; }
-.trash-can::after { right: 8px; }
+.trash-can::after  { right: 8px; }
 
-/* Trash Lid */
+/* Lid */
 .trash-lid {
     width: 40px;
     height: 6px;
@@ -91,12 +194,10 @@ body {
     border-radius: 3px;
     position: absolute;
     top: 0;
-    transform-origin: center bottom; /* Lid pivots from its bottom edge */
+    transform-origin: center bottom;
     transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     z-index: 2;
 }
-
-/* Lid handle */
 .trash-lid::before {
     content: '';
     position: absolute;
@@ -109,51 +210,63 @@ body {
     border-radius: 3px 3px 0 0;
 }
 
-/* Text Wrapper */
+/* ---------- Text wrapper & letters ---------- */
 .text-wrapper {
     display: flex;
     position: relative;
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* Individual Letters */
+.delete-btn.is-circle .text-wrapper {
+    opacity: 0;
+    transform: scale(0.5);
+    pointer-events: none;
+}
+
 .letter {
     display: inline-block;
     transition: all 0.6s cubic-bezier(0.55, 0.055, 0.675, 0.19);
-    /* Use the CSS variable --fly-dist defined inline in HTML */
-    /* This variable determines how far the letter flies */
+    z-index: 1;
 }
 
-/* --- Animation Classes (triggered by JS) --- */
-
-/* Lid opens */
-.trash-wrapper.lid-open .trash-lid {
-    transform: rotate(-110deg) translateY(-2px);
-}
-
-/* Letter flying animation */
 .letter.flying {
     opacity: 0;
-    /* Fly towards the trash can (top-left relative to the button) */
     transform: translate(
-        calc(var(--fly-x, -80px)), 
+        calc(var(--fly-x, -80px)),
         calc(var(--fly-y, -40px))
     ) scale(0.2) rotate(180deg);
 }
 
-/* Micro impact shake on the trash wrapper */
+/* ---------- Lid open state ---------- */
+.trash-wrapper.lid-open .trash-lid {
+    transform: rotate(-110deg) translateY(-2px);
+}
+.delete-btn.is-circle .trash-wrapper.lid-open .trash-lid {
+    transform: rotate(-110deg) translateY(-2px);
+}
+
+/* Static shake — just vibrate in place */
 .trash-wrapper.impact-shake {
-    animation: shake 0.15s ease-in-out;
+    animation: shakeStatic 0.15s ease-in-out;
 }
 
-@keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-3px) translateY(-2px); }
-    50% { transform: translateX(3px) translateY(1px); }
-    75% { transform: translateX(-1px) translateY(2px); }
-    100% { transform: translateX(0); }
+@keyframes shakeStatic {
+    0%, 100% { transform: translate(0, 0); }
+    25%      { transform: translate(-2px, -2px); }
+    50%      { transform: translate(2px, 2px); }
+    75%      { transform: translate(-1px, 1px); }
 }
 
-/* Optional: Subtitle style */
+/* Static circle-centered trash */
+.delete-btn.is-circle .trash-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+}
+
+/* ---------- Subtitle ---------- */
 .subtitle {
     color: #9e8ba8;
     letter-spacing: 2px;
