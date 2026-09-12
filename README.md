@@ -38,7 +38,7 @@ A slick "Delete" button where the letters fly into a trash can — plus a regula
 
 ```bash
 git clone https://github.com/monejoel/animated-delete-button.git
-
+```
 
 ---
 
